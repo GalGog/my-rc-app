@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
@@ -12,7 +11,7 @@ ReactDOM.render(<App />, document.getElementById('root'));
 serviceWorker.unregister();
 
 class Square extends React.Component{
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             value: null,
@@ -30,8 +29,18 @@ class Square extends React.Component{
     }
 }
 class Board extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            squares: Array(9).fill(null),
+        };
+    }
+
     renderSquare(i) {
-        return <Square/>;
+        return ( <Square value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+        />
+    );
     }
     render (){
     const status = 'Next player: X';
