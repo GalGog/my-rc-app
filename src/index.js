@@ -19,17 +19,6 @@ serviceWorker.unregister();
         );
 }
 class Board extends React.Component {
-   handleClick(i) {
-       const squares = this.state.squares.slice();
-       if (calculateWinner(squares) || squares [i]){
-           return;
-   }
-   squares[i] = this.state.xIsNext ? 'X': '0';
-        this.setState ({squares:squares,
-        xIsNext: !this.state.xIsNext,
-        });
-    }
-
     renderSquare(i) {
         return (
             <Square value={this.props.squares[i]}
@@ -37,18 +26,10 @@ class Board extends React.Component {
         />
     );
     }
-    render (){
-    const winner = calculateWinner(this.state.squares);
-    let status;
-    if (winner){
-        status = 'Winner:' + winner;
-    } else {
-        status = 'Next player: ' + (this.state.xIsNext ? 'X' : '0');
-    }
 
-    return(
+    render (){
+        return(
         <div>
-            <div className="status">{status}</div>
             <div className="board-row">
                 {this.renderSquare(0)}
                 {this.renderSquare(1)}
@@ -79,6 +60,21 @@ class Game extends React.Component{
              xIsNext: true,
          };
      }
+    handleClick(i){
+        const history = this.state.history;
+        const current = history[history.length -1];
+        const squares = current.squares.slice();
+        if (calculateWinner(squares) || squares [i]){
+            return;
+        }
+        squares[i] = this.state.xIsNext ? 'X': '0';
+        this.setState ({
+            history: history.concat([{
+                squares: squares
+            }]),
+            xIsNext: !this.state.xIsNext,
+        });
+    }
 
     render() {
         const history = this.state.history;
@@ -97,11 +93,11 @@ class Game extends React.Component{
                 <div className="game-board">
                     <Board
                     squares={current.squares}
-                    onClick={(i) => this.handle.Click(i)}
+                    onClick={(i) => this.handleClick(i)}
                     />
                 </div>
                 <div className="game-info">
-                    <div>{/* status*/}</div>
+                    <div>{status}</div>
                     <ol>{/*TODO*/}</ol>
                 </div>
             </div>
