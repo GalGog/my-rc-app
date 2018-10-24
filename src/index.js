@@ -19,27 +19,21 @@ serviceWorker.unregister();
         );
 }
 class Board extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            squares: Array(9).fill(null),
-            xIsNext: true,
-        };
-    }
-    handleClick(i){
-        const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
-        }
-        squares[i] = this.state.xIsNext ? 'X': '0';
+   handleClick(i) {
+       const squares = this.state.squares.slice();
+       if (calculateWinner(squares) || squares [i]){
+           return;
+   }
+   squares[i] = this.state.xIsNext ? 'X': '0';
         this.setState ({squares:squares,
         xIsNext: !this.state.xIsNext,
         });
     }
 
     renderSquare(i) {
-        return ( <Square value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
+        return (
+            <Square value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
         />
     );
     }
@@ -86,11 +80,25 @@ class Game extends React.Component{
          };
      }
 
-    render(){
+    render() {
+        const history = this.state.history;
+        const current = history[history.length - 1];
+        const winner = calculateWinner(current.squares);
+
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
+
         return(
             <div className="game">
                 <div className="game-board">
-                    <Board/>
+                    <Board
+                    squares={current.squares}
+                    onClick={(i) => this.handle.Click(i)}
+                    />
                 </div>
                 <div className="game-info">
                     <div>{/* status*/}</div>
